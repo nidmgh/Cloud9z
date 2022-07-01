@@ -33,11 +33,12 @@ public class RunningSS {
 		if (exitVal == 0) {
 			System.out.println("Success!");
       for (String i[]: output) {
-				System.out.println(i[0]+" "+i[1]+" "+i[2]);
+				System.out.println(i[0]+" "+i[1]+" "+i[2]+" "+i.length);
 				System.out.println(i[0]+" "
 				 +(new BigDecimal(i[1]))+" "
 				 +(new BigDecimal(i[2]))
 			                   	);
+			
       }
 			System.exit(0);
 		} else {

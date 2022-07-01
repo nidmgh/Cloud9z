@@ -66,7 +66,8 @@ public class stockTicker {
    */
   public static void main(String[] args) {
 
-    final int sleepMin = 2;
+    final int sleepMarketOpen = 6;
+    final int sleepMarketClose = 60;
 
 
     String DBHOST = System.getenv("DBHOST");
@@ -141,7 +142,7 @@ public class stockTicker {
       cmdList.add("./ticker.sh");
 			cmdList.addAll(symbols);
       Process p;
-
+      boolean marketClose = false;
  			try {
 							ProcessBuilder pb = new ProcessBuilder(cmdList);
 							p = pb.start();
@@ -161,6 +162,9 @@ public class stockTicker {
 
 								preStmt = conn.prepareStatement(query);
 								for (String res[]: output) {
+                   // 4th item is a * indicate market close
+                   // BTC always open so use one close all close rule
+									 marketClose = marketClose || (res.length == 4); 
 									 preStmt.setString(1,res[0]);
 									 preStmt.setBigDecimal(2,(new BigDecimal(res[1])));
 									 preStmt.setBigDecimal(3,(new BigDecimal(res[2])));
@@ -179,7 +183,15 @@ public class stockTicker {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-      Thread.sleep(1000*60*sleepMin); // sleep N min
+
+      int random_int;
+      if (marketClose) 
+				random_int = sleepMarketClose;
+    	else 
+				random_int = sleepMarketOpen;
+      random_int = (int)Math.floor(Math.random()*(random_int-(random_int/2)+1)+random_int/2);   // sleep a random minutes between random_int/2 and random_int 
+      System.out.println("sleep " + random_int + "minutes");
+      Thread.sleep(1000*60*random_int); // sleep N min
      }  /*** end ticker loop, will  change to continues background run **/
 
 			
