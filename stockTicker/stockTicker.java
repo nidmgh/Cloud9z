@@ -133,8 +133,8 @@ public class stockTicker {
       System.out.println("=== Will query the following symbols  === ");
       System.out.println(symbols);
 
-    /*** start ticker loop , temp for 100**/
-    for (int i = 0; i<100; i++) {   
+    /*** start ticker loop , temp for 1000**/
+    for (int i = 0; i<1000; i++) {   
 			//Run ticker.sh
 			List<String> cmdList = new ArrayList<String>();
       // adding command and args to the list
@@ -155,7 +155,7 @@ public class stockTicker {
 							}
 							int exitVal = p.waitFor();
 							if (exitVal == 0) {
-								System.out.println("ticker Success!");
+								System.out.println("ticker Success! num = " + i);
 
 								// INSERT INTO TICKER(SYMBOL,PRICE,PRICE_DIFF) VALUES
 								query = "INSERT INTO TICKER(SYMBOL,PRICE,PRICE_DIFF) VALUES(?,?,?)";
