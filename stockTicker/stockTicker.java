@@ -111,6 +111,8 @@ public class stockTicker {
     String query, result;
     query = "SELECT * FROM SECURITY";
 
+    int retryCount = 15;
+  while(retryCount > 0) {
     // get MySQL connection
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -178,9 +180,12 @@ public class stockTicker {
 
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
+							 
+              System.out.println("Location 100 Exception: " );
 							e.printStackTrace();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
+              System.out.println("Location 200 Exception: ");
 							e.printStackTrace();
 						}
 
@@ -198,9 +203,23 @@ public class stockTicker {
 
     } catch (SQLException ex) {
       // handle any errors
+      // The two SQL states that are 'retry-able' are 08S01
+      // for a communications error, and 40001 for deadlock.
+      // Only retry if the error was due to a stale connection,
+      // communications problem or deadlock
+      String sqlState = ex.getSQLState();
+            if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
+                retryCount -= 1;
+            } else {
+                retryCount = 0;
+            }
+
+
+
       System.out.println("SQLException: " + ex.getMessage());
       System.out.println("SQLState: " + ex.getSQLState());
       System.out.println("VendorError: " + ex.getErrorCode());
+
     } catch (Exception ex) {
       ex.printStackTrace();
     } finally {
@@ -208,7 +227,7 @@ public class stockTicker {
     try { preStmt.close(); } catch (Exception e) { /* Ignored */ }
     try { conn.close(); } catch (Exception e) { /* Ignored */ }
     }
-
+  } //end of retryCount loop
 
 
 

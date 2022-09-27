@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS nidmStockTest;
+
 USE nidmStockTest;
 
 DROP TABLE IF EXISTS  TICKER  ;
