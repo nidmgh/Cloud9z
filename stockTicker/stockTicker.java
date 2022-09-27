@@ -94,7 +94,7 @@ public class stockTicker {
     DBUSERPW = String.copyValueOf( 
 	  cnsl.readPassword( "Enter password : "));
     // Print password
-    System.out.println("DBUSERPW: " + DBUSERPW);
+    // System.out.println("DBUSERPW: " + DBUSERPW);
 
 
     /**
@@ -105,7 +105,9 @@ public class stockTicker {
     ResultSet rs = null;
 
 
-    String myUrl = "jdbc:mysql://" + DBHOST + ":3306/" + DBNAME;
+    String myUrl = "jdbc:mysql://" + DBHOST + ":3306/"
+	   	 + DBNAME
+		 + "?autoRecnnect=true";
 
     // SQL Query, and Result
     String query, result;
