@@ -66,8 +66,8 @@ public class stockTicker {
    */
   public static void main(String[] args) {
 
-    final int sleepMarketOpen = 6;
-    final int sleepMarketClose = 60;
+    final int sleepMarketOpen = 1; // was 6
+    final int sleepMarketClose = 2; // was 60 change to 2 for testing
 
 
     String DBHOST = System.getenv("DBHOST");
@@ -97,6 +97,8 @@ public class stockTicker {
     // System.out.println("DBUSERPW: " + DBUSERPW);
 
 
+    int retryCount = 15;
+//  while(retryCount > 0) {
     /**
       *  Set up MySQL connection
       */ 
@@ -113,8 +115,6 @@ public class stockTicker {
     String query, result;
     query = "SELECT * FROM SECURITY";
 
-    int retryCount = 15;
-  while(retryCount > 0) {
     // get MySQL connection
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -198,7 +198,8 @@ public class stockTicker {
 				random_int = sleepMarketOpen;
       random_int = (int)Math.floor(Math.random()*(random_int-(random_int/2)+1)+random_int/2);   // sleep a random minutes between random_int/2 and random_int 
       System.out.println("sleep " + random_int + "minutes");
-      Thread.sleep(1000*60*random_int); // sleep N min
+      int sleepNmin = 1000*60;
+      Thread.sleep(sleepNmin*random_int); // sleep N min
      }  /*** end ticker loop, will  change to continues background run **/
 
 			
@@ -218,6 +219,7 @@ public class stockTicker {
 
 
 
+      System.out.println("Time: " + java.time.LocalTime.now());
       System.out.println("SQLException: " + ex.getMessage());
       System.out.println("SQLState: " + ex.getSQLState());
       System.out.println("VendorError: " + ex.getErrorCode());
@@ -229,7 +231,7 @@ public class stockTicker {
     try { preStmt.close(); } catch (Exception e) { /* Ignored */ }
     try { conn.close(); } catch (Exception e) { /* Ignored */ }
     }
-  } //end of retryCount loop
+  //} //end of retryCount loop
 
 
 
