@@ -23,3 +23,20 @@ where  mod(c1_int, floor(rand()*(100-50)+50)) = 0;
 create event updateevent on schedule every '5' minute 
 do update nidmTestIUD_1009 set c1_int = c1_int + 10000
 where  mod(c1_int, floor(rand()*(100-50)+50)) = 0;
+
+
+-- 
+alter table nidmTestIUD_1009 add column c3_op varchar(8);
+
+
+
+CREATE TRIGGER setinsert BEFORE INSERT ON nidmTestIUD_1009
+       FOR EACH ROW SET NEW.c3_op = "INSERT";
+
+CREATE TRIGGER setupdate BEFORE UPDATE ON nidmTestIUD_1009
+       FOR EACH ROW SET NEW.c3_op = "UPDATE";       
+
+
+CREATE VIEW IUDVIEW 
+AS SELECT * FROM  nidmTestIUD_1009 WHERE c3_op IN ("INSERT", "UPDATE","DELETE");
+
