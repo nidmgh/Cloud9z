@@ -43,10 +43,13 @@ DELIMITER $$
 CREATE TRIGGER setdelete AFTER DELETE ON nidmTestIUD
        FOR EACH ROW 
 BEGIN 
-   UPDATE nidmTestIUD set C1=C1-1 where  c3_op = "DELETE";
+   UPDATE nidmTestIUD set C1_INT=C1_INT-1 where  c3_op = "DELETE";
 END $$
 DELIMITER ;
 
 CREATE VIEW IUDVIEW 
 AS SELECT * FROM  nidmTestIUD WHERE c3_op IN ("INSERT", "UPDATE","DELETE");
 
+
+INSERT INTO nidmTestIUD  (c1_int, c3_op, c4_json) 
+values(999, 'test','{"c1_int": "999", "name": "nidm_json"}' );
